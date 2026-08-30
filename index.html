@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joyce arrives at 6:00 PM</title>
+<style>
+  :root{
+    --navy-deep:#07131F;
+    --navy:#0C1E30;
+    --gold:#C9A227;
+    --gold-soft:#E4C56A;
+    --ink:#EAF0F6;
+    --muted:#6C8399;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:radial-gradient(120% 90% at 50% 0%, var(--navy) 0%, var(--navy-deep) 70%);
+    color:var(--ink);
+    font-family:"Avenir Next","Segoe UI",Inter,system-ui,-apple-system,sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    padding:32px;
+  }
+  main{width:100%;max-width:960px;text-align:center}
+
+  .lede{
+    font-size:clamp(1rem,3.2vw,1.55rem);
+    font-weight:400;
+    letter-spacing:.01em;
+    color:var(--muted);
+    margin-bottom:28px;
+  }
+  .lede strong{color:var(--gold-soft);font-weight:600}
+
+  .clockface{
+    display:flex;align-items:flex-end;justify-content:center;
+    gap:clamp(4px,1.2vw,14px);
+    font-variant-numeric:tabular-nums;
+    font-feature-settings:"tnum" 1;
+    font-family:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+    line-height:.9;
+  }
+  .unit{display:flex;flex-direction:column;align-items:center;gap:12px}
+  .digits{
+    font-size:clamp(3.2rem,15vw,9rem);
+    font-weight:600;
+    color:var(--ink);
+    text-shadow:0 0 60px rgba(201,162,39,.18);
+  }
+  .name{
+    font-family:"Avenir Next","Segoe UI",Inter,system-ui,sans-serif;
+    font-size:clamp(.62rem,1.6vw,.8rem);
+    letter-spacing:.22em;
+    color:var(--muted);
+  }
+  .sep{
+    font-size:clamp(2.4rem,11vw,6.5rem);
+    color:rgba(108,131,153,.45);
+    padding-bottom:calc(12px + clamp(.62rem,1.6vw,.8rem));
+  }
+  .fraction .digits{
+    font-size:clamp(1.8rem,7vw,4.2rem);
+    color:var(--gold);
+    padding-bottom:.35em;
+  }
+  .fraction .name{color:rgba(201,162,39,.6)}
+
+  .rule{
+    width:min(420px,80%);
+    height:1px;
+    background:linear-gradient(90deg,transparent,rgba(201,162,39,.45),transparent);
+    margin:44px auto 20px;
+  }
+  .now{
+    font-size:.9rem;
+    color:var(--muted);
+    font-variant-numeric:tabular-nums;
+  }
+
+  /* arrival state */
+  body.here .clockface{display:none}
+  .arrival{display:none}
+  body.here .arrival{display:block}
+  .arrival h1{
+    font-size:clamp(2rem,8vw,4.5rem);
+    font-weight:600;
+    color:var(--gold-soft);
+    letter-spacing:-.01em;
+  }
+  .arrival p{margin-top:16px;color:var(--muted)}
+
+  @media (prefers-reduced-motion:no-preference){
+    body.here .arrival h1{animation:rise .8s ease-out}
+    @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="lede"><strong>Joyce</strong> is coming to the front desk at 6:00 PM</p>
+
+  <div class="clockface" id="clock">
+    <div class="unit"><span class="digits" id="hh">00</span><span class="name">hours</span></div>
+    <span class="sep">:</span>
+    <div class="unit"><span class="digits" id="mm">00</span><span class="name">minutes</span></div>
+    <span class="sep">:</span>
+    <div class="unit"><span class="digits" id="ss">00</span><span class="name">seconds</span></div>
+    <div class="unit fraction"><span class="digits" id="cs">.00</span><span class="name">split</span></div>
+  </div>
+
+  <div class="arrival">
+    <h1>Joyce is at the front desk.</h1>
+    <p>Right on time, 6:00 PM.</p>
+  </div>
+
+  <div class="rule"></div>
+  <p class="now" id="now"></p>
+</main>
+
+<script>
+(function () {
+  const el = {
+    hh: document.getElementById('hh'),
+    mm: document.getElementById('mm'),
+    ss: document.getElementById('ss'),
+    cs: document.getElementById('cs'),
+    now: document.getElementById('now')
+  };
+  const pad = (n, w = 2) => String(n).padStart(w, '0');
+
+  // Shows the arrival message for 10 minutes after 6:00 PM, then rolls to the next day.
+  const GRACE_MS = 10 * 60 * 1000;
+
+  function target(now) {
+    const t = new Date(now);
+    t.setHours(18, 0, 0, 0);
+    if (now - t >= GRACE_MS) t.setDate(t.getDate() + 1);
+    return t;
+  }
+
+  function frame() {
+    const now = new Date();
+    const diff = target(now) - now;
+
+    if (diff <= 0) {
+      document.body.classList.add('here');
+    } else {
+      document.body.classList.remove('here');
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor(diff / 60000) % 60;
+      const s = Math.floor(diff / 1000) % 60;
+      const c = Math.floor(diff / 10) % 100;
+      el.hh.textContent = pad(h);
+      el.mm.textContent = pad(m);
+      el.ss.textContent = pad(s);
+      el.cs.textContent = '.' + pad(c);
+      document.title = pad(h) + ':' + pad(m) + ':' + pad(s) + ' — Joyce';
+    }
+
+    el.now.textContent = now.toLocaleTimeString([], {
+      hour: 'numeric', minute: '2-digit', second: '2-digit'
+    });
+
+    requestAnimationFrame(frame);
+  }
+
+  frame();
+})();
+</script>
+</body>
+</html>
