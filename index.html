@@ -17,7 +17,10 @@
   .out{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);text-align:center}
   .muted{color:var(--muted);font-size:13px}
   .big{font-size:48px;font-weight:700;color:var(--gold2);margin:6px 0 2px}
-  .cost{font-size:14px;color:var(--muted)}
+  .cost{font-size:13px;color:var(--muted);margin-top:10px}
+  .label{font-size:11px;letter-spacing:1.5px;color:var(--gold)}
+  .total{margin-top:12px;padding:8px;border:1px dashed var(--line);border-radius:8px;font-size:13px;color:var(--text)}
+  .total span{color:var(--muted)}
   button{width:100%;margin-top:18px;background:var(--gold);color:#1a1a1a;border:0;border-radius:8px;padding:13px;font-size:15px;font-weight:700;cursor:pointer}
   button:disabled{opacity:.5;cursor:default}
   #msg{margin-top:10px;text-align:center;font-size:13px;min-height:18px}
@@ -44,8 +47,10 @@
   <input id="rate" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal">
 
   <div class="out">
-    <div class="muted">Guest earns <b id="earn">0</b> pts — give the same</div>
+    <div class="label">POINTS TO POST</div>
     <div class="big" id="pts">0</div>
+    <div class="muted">Guest earns <b id="earn">0</b> pts on this stay</div>
+    <div class="total">Guest's total for this stay: <b id="total">0</b> pts <span>(2× earnings)</span></div>
     <div class="cost">Cost to hotel: <b id="cost">$0.00</b></div>
   </div>
 
@@ -66,6 +71,7 @@ function calc(){
   const f = n => n.toLocaleString("en-US");
   $("earn").textContent = f(pts);
   $("pts").textContent = f(pts);
+  $("total").textContent = f(pts*2);
   $("cost").textContent = "$" + (pts*COST_PER_POINT).toFixed(2);
 }
 $("tier").oninput = calc; $("rate").oninput = calc;
