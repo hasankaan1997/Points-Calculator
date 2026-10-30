@@ -1,104 +1,199 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Service Recovery Points</title>
-<style>
-  :root{--bg:#0e1626;--card:#16213a;--in:#1c2946;--line:#2a3a5e;--text:#e8ecf5;--muted:#8e9ab5;--gold:#c9a55a;--gold2:#e3c98a;--ok:#4fbf8a;--bad:#e06464}
-  *{box-sizing:border-box}
-  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--text);font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;padding:16px}
-  .card{width:100%;max-width:380px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
-  h1{margin:0 0 18px;font-size:18px;text-align:center}
-  h1 span{color:var(--gold)}
-  label{display:block;font-size:12px;color:var(--muted);margin:12px 0 4px}
-  input,select{width:100%;background:var(--in);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:11px;font-size:16px}
-  input:focus,select:focus{outline:none;border-color:var(--gold)}
-  .out{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);text-align:center}
-  .muted{color:var(--muted);font-size:13px}
-  .big{font-size:48px;font-weight:700;color:var(--gold2);margin:6px 0 2px}
-  .cost{font-size:13px;color:var(--muted);margin-top:10px}
-  .label{font-size:11px;letter-spacing:1.5px;color:var(--gold)}
-  .total{margin-top:12px;padding:8px;border:1px dashed var(--line);border-radius:8px;font-size:13px;color:var(--text)}
-  .total span{color:var(--muted)}
-  button{width:100%;margin-top:18px;background:var(--gold);color:#1a1a1a;border:0;border-radius:8px;padding:13px;font-size:15px;font-weight:700;cursor:pointer}
-  button:disabled{opacity:.5;cursor:default}
-  #msg{margin-top:10px;text-align:center;font-size:13px;min-height:18px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, follow">
+  <meta http-equiv="refresh" content="5;url=https://hkaksu.com/">
+  <title>We've Moved | HKAKSU Workspace</title>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080e19;
+      --surface: #111b2b;
+      --border: #2c3e56;
+      --text: #f0f5ff;
+      --muted: #a8bad3;
+      --accent: #8daeff;
+      --green: #6ee7c2;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at 50% 20%, #1a2c4d, transparent 55%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont,
+                   "Segoe UI", Arial, sans-serif;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 510px;
+      padding: 48px 36px;
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.35);
+    }
+
+    .logo {
+      width: 65px;
+      height: 65px;
+      margin: 0 auto 20px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #49618a;
+      background: #1a2a43;
+      border-radius: 18px;
+      font-size: 30px;
+      font-weight: 800;
+    }
+
+    .brand {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: var(--accent);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-top: 30px;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 12px 0;
+      font-size: clamp(30px, 6vw, 42px);
+      letter-spacing: -1px;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 14px;
+      margin: 0 auto 26px;
+    }
+
+    .button {
+      display: block;
+      background: #3769c7;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 11px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      transition: background .2s;
+    }
+
+    .button:hover {
+      background: #4d80df;
+    }
+
+    .url {
+      margin-top: 18px;
+      font-size: 13px;
+      color: var(--accent);
+    }
+
+    .footer {
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .progress {
+      height: 3px;
+      margin-top: 18px;
+      background: #273850;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    .progress::before {
+      content: "";
+      display: block;
+      height: 100%;
+      width: 100%;
+      background: var(--green);
+      transform-origin: left;
+      animation: countdown 5s linear forwards;
+    }
+
+    @keyframes countdown {
+      from { transform: scaleX(1); }
+      to { transform: scaleX(0); }
+    }
+
+    @media (max-width: 500px) {
+      .card { padding: 36px 22px; }
+    }
+  </style>
 </head>
+
 <body>
-<div class="card">
-  <h1>Service Recovery <span>Points</span></h1>
 
-  <label>Confirmation #</label>
-  <input id="conf" autocomplete="off">
+  <main class="card">
+    <div class="logo">H</div>
+    <div class="brand">HKAKSU WORKSPACE</div>
 
-  <label>Bonvoy tier</label>
-  <select id="tier">
-    <option value="10">Member</option>
-    <option value="11">Silver Elite</option>
-    <option value="12.5">Gold Elite</option>
-    <option value="15">Platinum Elite</option>
-    <option value="17.5">Titanium Elite</option>
-    <option value="17.5">Ambassador Elite</option>
-  </select>
+    <div class="eyebrow">A New Home for Our Tools</div>
 
-  <label>Total room rate ($, before tax)</label>
-  <input id="rate" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal">
+    <h1>We've Moved!</h1>
 
-  <div class="out">
-    <div class="label">POINTS TO POST</div>
-    <div class="big" id="pts">0</div>
-    <div class="muted">Guest earns <b id="earn">0</b> pts on this stay</div>
-    <div class="total">Guest's total for this stay: <b id="total">0</b> pts <span>(2× earnings)</span></div>
-    <div class="cost">Cost to hotel: <b id="cost">$0.00</b></div>
-  </div>
+    <p>
+      This application is now part of the new
+      <strong style="color:#fff">HKAKSU Workspace</strong>.
+      All our tools and applications are available
+      in one centralized location.
+    </p>
 
-  <button id="save">Save to Log</button>
-  <div id="msg"></div>
-</div>
+    <a class="button" href="https://hkaksu.com/">
+      Continue to New Website &rarr;
+    </a>
 
-<script>
-// Paste the Apps Script web app URL here after deploying:
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLkfpwazbEBpchjlLCEbIiopRSfh-fci8sd2MExou_cz0mitRmbl3f2zO1Ry0RDgebWQ/exec";
-const COST_PER_POINT = 0.0055;
+    <div class="url">hkaksu.com</div>
 
-const $ = id => document.getElementById(id);
-let pts = 0;
+    <div class="footer">
+      You will be redirected automatically in
+      <strong id="countdown">5</strong> seconds.
+      <div class="progress"></div>
+    </div>
+  </main>
 
-function calc(){
-  pts = Math.round((parseFloat($("rate").value)||0) * parseFloat($("tier").value));
-  const f = n => n.toLocaleString("en-US");
-  $("earn").textContent = f(pts);
-  $("pts").textContent = f(pts);
-  $("total").textContent = f(pts*2);
-  $("cost").textContent = "$" + (pts*COST_PER_POINT).toFixed(2);
-}
-$("tier").oninput = calc; $("rate").oninput = calc;
+  <script>
+    let seconds = 5;
 
-function msg(t, ok){ $("msg").textContent = t; $("msg").style.color = ok ? "var(--ok)" : "var(--bad)"; }
+    const timer = setInterval(() => {
+      seconds--;
+      document.getElementById("countdown").textContent =
+        Math.max(seconds, 0);
 
-$("save").onclick = async () => {
-  const conf = $("conf").value.trim();
-  if(!conf) return msg("Enter the confirmation number.");
-  if(!pts)  return msg("Enter the room rate.");
-  $("save").disabled = true; msg("Saving…", true);
-  const data = {
-    conf,
-    tier: $("tier").selectedOptions[0].text,
-    rate: parseFloat($("rate").value),
-    points: pts,
-    cost: +(pts*COST_PER_POINT).toFixed(2)
-  };
-  try{
-    await fetch(SCRIPT_URL, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain"}, body:JSON.stringify(data)});
-    msg("Saved to log ✓", true);
-    $("conf").value = ""; $("rate").value = ""; $("tier").selectedIndex = 0; calc();
-  }catch(e){
-    msg("Could not save — check connection.");
-  }
-  $("save").disabled = false;
-};
-</script>
+      if (seconds <= 0) {
+        clearInterval(timer);
+        window.location.replace("https://hkaksu.com/");
+      }
+    }, 1000);
+  </script>
+
 </body>
 </html>
